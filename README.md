@@ -9,7 +9,7 @@
 ## 📸 Demo
 
 <!-- Replace with your actual image path after uploading to repo -->
-![FPGA recognizing digit 9](docs/demo.jpg)
+![FPGA recognizing digit 9](demo.jpeg)
 
 *Screen shows digit "9" from MNIST dataset. Basys3 7-segment display shows the live FPGA prediction — in 0.35 ms.*
 
