@@ -105,8 +105,6 @@ fpga-snn-basys3/
 ├── host/
 │   └── ide_snn_client.py         # Python host client (send images, eval accuracy)
 │
-├── app/                          # Desktop application (Python/Electron)
-│   └── ...
 │
 ├── docs/
 │   └── demo.jpg                  # Demo photo (replace with your image)
@@ -165,24 +163,6 @@ The 1-cycle `valid` pulse from the SNN engine could be missed if the UART transm
 pip install pyserial tensorflow pillow numpy matplotlib
 ```
 
-### Running the Client
-```bash
-# Interactive menu
-python ide_snn_client.py
-
-# Send a specific MNIST image by index
-python ide_snn_client.py --port COM3 --index 7
-
-# Draw a digit using paint window
-python ide_snn_client.py --port COM3 --draw
-
-# Run full 10k accuracy evaluation
-python ide_snn_client.py --port COM3 --eval
-
-# Generate input.mem for Vivado simulation (no FPGA needed)
-python ide_snn_client.py --generate --index 42
-```
-
 ### UART Protocol
 ```
 PC  → FPGA : 0xAB (sync byte) + 784 pixel bytes (row-major, uint8, 115200 baud)
@@ -213,15 +193,39 @@ FPGA → PC  : 0xBB (marker byte) + 1 byte prediction (0x00–0x09)
 
 ---
 
-## 🖥️ Desktop Application
+## 🖥️ Host Application — `ide_snn_client.py`
 
-A desktop GUI app (Python/Electron) is included in the `app/` folder, providing:
-- Visual digit drawing canvas
-- Real-time FPGA inference display
-- Accuracy evaluation dashboard
-- Confusion matrix and per-digit statistics
+The Python host application runs on your PC and communicates with the FPGA over UART. It includes a full **Tkinter-based GUI** for drawing digits and a command-line interactive menu.
 
-> See `app/README.md` for setup and usage instructions.
+### Features
+- 🎨 **Draw mode** — paint window to draw a digit with your mouse, sent live to the FPGA
+- 🔢 **MNIST test mode** — send any of the 10,000 MNIST test images by index
+- 📁 **File mode** — send any `.png` / `.jpg` image directly
+- 📊 **Accuracy eval** — run the full 10k MNIST evaluation and report accuracy
+- 🗂️ **Generate mode** — create `input.mem` for Vivado simulation (no FPGA needed)
+
+### Setup
+```bash
+pip install pyserial tensorflow pillow numpy matplotlib
+```
+
+### Usage
+```bash
+# Interactive menu (recommended)
+python ide_snn_client.py
+
+# Send a specific MNIST image by index
+python ide_snn_client.py --port COM3 --index 7
+
+# Draw a digit using the paint window
+python ide_snn_client.py --port COM3 --draw
+
+# Run full 10k accuracy evaluation
+python ide_snn_client.py --port COM3 --eval
+
+# Generate input.mem for Vivado simulation (no FPGA needed)
+python ide_snn_client.py --generate --index 42
+```
 
 ---
 
@@ -249,4 +253,4 @@ This project is open-source under the [MIT License](LICENSE).
 - [Maass, W. (1997). Networks of spiking neurons: The third generation of neural models](https://doi.org/10.1016/S0893-6080(97)00011-7)
 - [Xilinx UG901 — Vivado Design Suite: Synthesis](https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis)
 - [Digilent Basys3 Reference Manual](https://digilent.com/reference/programmable-logic/basys-3/reference-manual)
-- [LeCun et al. — MNIST Handwritten Digit Database](http://yann.lecun.com/exdb/mnist/)# Fpga-SNN-Inference
+- [LeCun et al. — MNIST Handwritten Digit Database](http://yann.lecun.com/exdb/mnist/)
